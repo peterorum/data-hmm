@@ -43,7 +43,7 @@ pp.pprint(sydney_trends_set)
 print('common')
 pp.pprint(common_trends)
 
-if len(common_trends) > 0:
+if len(common_trends) > -1:
     tweet = 'Trending in Sydney and The World: '
 
     for x in common_trends:
