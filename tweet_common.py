@@ -44,7 +44,7 @@ print('common')
 pp.pprint(common_trends)
 
 if len(common_trends) > 0:
-    tweet = 'Trending in Sydney and The World: '
+    tweet = 'Trending in Australia and The World: '
 
     for x in common_trends:
         if len(tweet) + len(x) + 2 <= 140:
