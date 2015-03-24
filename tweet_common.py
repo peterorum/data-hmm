@@ -54,5 +54,19 @@ if len(common_trends) > 0:
 
     print(tweet)
 
-    result = twit.statuses.update(status=tweet)
-    pp.pprint(result)
+    lasttweet = ''
+    filename = 'last-tweet.txt'
+
+    if os.path.isfile(filename):
+        f = open(filename, 'r')
+        lasttweet = f.read()
+        f.close()
+
+    if lasttweet != tweet:
+        f = open(filename, 'w')
+        f.write(tweet)
+        f.close()
+
+        result = twit.statuses.update(status=tweet)
+        pp.pprint(result)
+
