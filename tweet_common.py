@@ -62,7 +62,7 @@ if len(common_trends) > 0:
         lasttweet = f.read()
         f.close()
 
-    if lasttweet != tweet:
+    if lasttweet.lower() != tweet.lower():
         f = open(filename, 'w')
         f.write(tweet)
         f.close()
