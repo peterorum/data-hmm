@@ -57,3 +57,5 @@ target/
 *.sublime-workspace
 
 last-tweet.txt
+
+private/
