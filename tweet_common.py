@@ -15,9 +15,12 @@ import twitter
 
 def retweet(topic):
     search_results = twit.search.tweets(q=topic, lang='en', result_type='popular')
-    #pp.pprint(search_results)
+    print('search_results')
+    pp.pprint(search_results)
 
     texts = [{'id': tweet['id_str'], 'text': tweet['text'], 'retweets': tweet['retweet_count']} for tweet in search_results['statuses']]
+    print(texts)
+    pp.pprint(texts)
 
     if len(texts) > 0:
         # sort by retweet count
