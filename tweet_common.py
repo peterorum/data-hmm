@@ -45,6 +45,8 @@ auth = twitter.oauth.OAuth(os.environ['tw_hmm_oauth_token'], os.environ['tw_hmm_
 twit = twitter.Twitter(auth=auth)
 
 #---- start
+retweet('#Appreciate5YearsOfZayn')
+sys.exit()
 
 WORLD_WOE_ID = 1
 AUSTRALIA_WOE_ID = 23424748
