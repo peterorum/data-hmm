@@ -3,8 +3,9 @@
 import os
 #import re
 #import sys
+#import json
 import pprint
-import json
+
 import twitter
 
 #import pudb
@@ -18,16 +19,17 @@ def retweet(topic):
 
     texts = [{'id': tweet['id_str'], 'text': tweet['text'], 'retweets': tweet['retweet_count']} for tweet in search_results['statuses']]
 
-    # sort by retweet count
-    texts = sorted(texts, key=lambda t: t['retweets'])
-    #pp.pprint(texts[0])
+    if len(texts) > 0:
+        # sort by retweet count
+        texts = sorted(texts, key=lambda t: t['retweets'])
+        #pp.pprint(texts[0])
 
-    #take most retweeted
-    retweet_id = texts[0]['id']
+        #take most retweeted
+        retweet_id = texts[0]['id']
 
-    # retweet
-    rtresult = twit.statuses.retweet(id=retweet_id)
-    pp.pprint(rtresult)
+        # retweet
+        rtresult = twit.statuses.retweet(id=retweet_id)
+        pp.pprint(rtresult)
 
 
 #---- main
