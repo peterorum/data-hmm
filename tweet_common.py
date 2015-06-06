@@ -4,11 +4,33 @@ import os
 #import re
 #import sys
 import pprint
-#import json
+import json
 import twitter
 
 #import pudb
 #pu.db
+
+# ---- retweet
+
+def retweet(topic):
+    search_results = twit.search.tweets(q=topic, lang='en', result_type='popular')
+    #pp.pprint(search_results)
+
+    texts = [{'id': tweet['id_str'], 'text': tweet['text'], 'retweets': tweet['retweet_count']} for tweet in search_results['statuses']]
+
+    # sort by retweet count
+    texts = sorted(texts, key=lambda t: t['retweets'])
+    #pp.pprint(texts[0])
+
+    #take most retweeted
+    retweet_id = texts[0]['id']
+
+    # retweet
+    rtresult = twit.statuses.retweet(id=retweet_id)
+    pp.pprint(rtresult)
+
+
+#---- main
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -77,6 +99,9 @@ if len(new_trends) > 0:
         out_file.write('\n'.join(topic_history[-history_count:]))
 
     #tweet
-
     result = twit.statuses.update(status=tweet)
     pp.pprint(result)
+
+    # retweet the most popular
+    retweet(trend)
+
