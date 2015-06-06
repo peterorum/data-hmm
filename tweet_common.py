@@ -15,16 +15,15 @@ import twitter
 
 def retweet(topic):
     search_results = twit.search.tweets(q=topic, lang='en')
-    print('search_results')
-    pp.pprint(search_results)
+    #print('search_results')
+    #pp.pprint(search_results)
 
     texts = [{'id': tweet['id_str'], 'text': tweet['text'], 'retweets': tweet['retweet_count']} for tweet in search_results['statuses']]
-    print(texts)
-    pp.pprint(texts)
+    #print(texts)
 
     if len(texts) > 0:
         # sort by retweet count
-        texts = sorted(texts, key=lambda t: t['retweets'])
+        texts = sorted(texts, key=lambda t: t['retweets'], Reverse=True)
         pp.pprint(texts)
 
         #take most retweeted
@@ -46,9 +45,6 @@ auth = twitter.oauth.OAuth(os.environ['tw_hmm_oauth_token'], os.environ['tw_hmm_
 twit = twitter.Twitter(auth=auth)
 
 #---- start
-
-retweet('#Appreciate5YearsOfZayn')
-sys.exit()
 
 WORLD_WOE_ID = 1
 AUSTRALIA_WOE_ID = 23424748
