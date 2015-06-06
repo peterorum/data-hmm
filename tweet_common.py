@@ -22,7 +22,7 @@ def retweet(topic):
     if len(texts) > 0:
         # sort by retweet count
         texts = sorted(texts, key=lambda t: t['retweets'])
-        #pp.pprint(texts[0])
+        pp.pprint(texts)
 
         #take most retweeted
         retweet_id = texts[0]['id']
@@ -30,6 +30,8 @@ def retweet(topic):
         # retweet
         rtresult = twit.statuses.retweet(id=retweet_id)
         pp.pprint(rtresult)
+    else:
+        print('nothing to retweet')
 
 
 #---- main
