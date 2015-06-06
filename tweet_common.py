@@ -23,7 +23,7 @@ def retweet(topic):
 
     if len(texts) > 0:
         # sort by retweet count
-        texts = sorted(texts, key=lambda t: t['retweets'], Reverse=True)
+        texts = sorted(texts, key=lambda t: t['retweets'], reverse=True)
         pp.pprint(texts)
 
         #take most retweeted
