@@ -14,7 +14,7 @@ import twitter
 # ---- retweet
 
 def retweet(topic):
-    search_results = twit.search.tweets(q=topic, lang='en', result_type='popular')
+    search_results = twit.search.tweets(q=topic, lang='en')
     print('search_results')
     pp.pprint(search_results)
 
