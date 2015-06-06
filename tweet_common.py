@@ -2,7 +2,7 @@
 
 import os
 #import re
-#import sys
+import sys
 #import json
 import pprint
 
@@ -44,6 +44,11 @@ pp = pprint.PrettyPrinter(indent=4)
 auth = twitter.oauth.OAuth(os.environ['tw_hmm_oauth_token'], os.environ['tw_hmm_oauth_token_secret'], os.environ['tw_hmm_consumer_key'], os.environ['tw_hmm_consumer_secret'])
 
 twit = twitter.Twitter(auth=auth)
+
+#---- start
+
+retweet('#Appreciate5YearsOfZayn')
+    sys.exit()
 
 WORLD_WOE_ID = 1
 AUSTRALIA_WOE_ID = 23424748
