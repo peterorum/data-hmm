@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
 import os
-import re
-# import sys
+#import re
+#import sys
 import pprint
-import json
+#import json
 import twitter
 
 #import pudb
@@ -17,7 +17,6 @@ auth = twitter.oauth.OAuth(os.environ['tw_hmm_oauth_token'], os.environ['tw_hmm_
 twit = twitter.Twitter(auth=auth)
 
 WORLD_WOE_ID = 1
-#SYDNEY_WOE_ID = 1105779
 AUSTRALIA_WOE_ID = 23424748
 
 # Prefix ID with the underscore for query string parameterization.
@@ -43,30 +42,41 @@ pp.pprint(australia_trends_set)
 print('common')
 pp.pprint(common_trends)
 
-if len(common_trends) > 0:
-    tweet = 'Trending in Australia and The World: '
+# tweet the first topic not in the last 24 topics tweeted
+history_count = 24
+history_filename = 'history.txt'
 
-    for x in common_trends:
-        if len(tweet) + len(x) + 2 <= 140:
-            tweet += x + ', '
+topic_history = []
 
-    tweet = re.compile(', $').sub('', tweet)
+if os.path.isfile(history_filename):
+    with open(history_filename, 'rU') as in_file:
+        topic_history = in_file.read().split('\n')
+
+print('history')
+pp.pprint(topic_history)
+
+new_trends = common_trends.difference(set(topic_history))
+
+print('new')
+pp.pprint(new_trends)
+
+if len(new_trends) > 0:
+    # pick first
+    trend = [t for t in new_trends][0]
+
+    tweet = 'Trending in Australia and The World: ' + trend
 
     print(tweet)
 
-    lasttweet = ''
-    filename = 'last-tweet.txt'
+    # add trend to history
 
-    if os.path.isfile(filename):
-        f = open(filename, 'r')
-        lasttweet = f.read()
-        f.close()
+    topic_history.append(trend)
 
-    if lasttweet.lower() != tweet.lower():
-        f = open(filename, 'w')
-        f.write(tweet)
-        f.close()
+    # save n last
+    with open(history_filename, 'w') as out_file:
+        out_file.write('\n'.join(topic_history[-history_count:]))
 
-        result = twit.statuses.update(status=tweet)
-        pp.pprint(result)
+    #tweet
 
+    result = twit.statuses.update(status=tweet)
+    pp.pprint(result)
