@@ -2,8 +2,8 @@
 
 import os
 #import re
-import sys
-#import json
+#import sys
+import json
 import pprint
 
 import twitter
@@ -27,89 +27,123 @@ def retweet(topic):
         pp.pprint(texts)
 
         #take most retweeted
-        retweet_id = texts[0]['id']
 
-        # retweet
-        rtresult = twit.statuses.retweet(id=retweet_id)
-        pp.pprint(rtresult)
+        result = {'retweets': texts[0]['retweets'], 'id': texts[0]['id']}
+
+        return result
     else:
         print('nothing to retweet')
 
+def get_location_trend(location, australia_trends_set, topic_history):
+    found = False
 
-#---- main
+    location_trends = twit.trends.place(_id=location['woeid'])
+    print(location['name'])
+    print(json.dumps(location_trends, indent=4))
 
+    location_trends_set = set([trend['name'] for trend in location_trends[0]['trends']])
+    common_trends = location_trends_set.intersection(australia_trends_set)
+
+    print('common')
+    pp.pprint(common_trends)
+
+    new_trends = common_trends.difference(set(topic_history))
+
+    print('new')
+    pp.pprint(new_trends)
+
+    if len(new_trends) > 0:
+        found = True
+        # pick first
+        trend = [t for t in new_trends][0]
+
+        tweet = 'Trending in Australia and ' + location['name'] + ': ' + trend
+
+        print(tweet)
+
+        # add trend to history
+
+        topic_history.append(trend)
+
+        # save n last
+        with open(history_filename, 'w') as out_file:
+            out_file.write('\n'.join(topic_history[-history_count:]))
+
+        # retweet the most popular
+        retweet_result = retweet(trend)
+
+        tweet = tweet + '. ' + str(retweet_result['retweets']) + " so far."
+
+        print(tweet)
+
+        #tweet
+        result = twit.statuses.update(status=tweet)
+        pp.pprint(result)
+
+        # retweet
+        rtresult = twit.statuses.retweet(id=retweet_result['id'])
+        pp.pprint(rtresult)
+
+    return found
+
+#---- global
 pp = pprint.PrettyPrinter(indent=4)
-
 auth = twitter.oauth.OAuth(os.environ['tw_hmm_oauth_token'], os.environ['tw_hmm_oauth_token_secret'], os.environ['tw_hmm_consumer_key'], os.environ['tw_hmm_consumer_secret'])
-
 twit = twitter.Twitter(auth=auth)
-
-#---- start
-
-WORLD_WOE_ID = 1
-AUSTRALIA_WOE_ID = 23424748
-
-# Prefix ID with the underscore for query string parameterization.
-# Without the underscore, the twitter package appends the ID value
-# to the URL itself as a special case keyword argument.
-
-world_trends = twit.trends.place(_id=WORLD_WOE_ID)
-australia_trends = twit.trends.place(_id=AUSTRALIA_WOE_ID)
-
-#print(json.dumps(world_trends, indent=4))
-#print(json.dumps(australia_trends, indent=4))
-
-world_trends_set = set([trend['name'] for trend in world_trends[0]['trends']])
-australia_trends_set = set([trend['name'] for trend in australia_trends[0]['trends']])
-common_trends = world_trends_set.intersection(australia_trends_set)
-
-print('world')
-pp.pprint(world_trends_set)
-
-print('australia')
-pp.pprint(australia_trends_set)
-
-print('common')
-pp.pprint(common_trends)
 
 # tweet the first topic not in the last 24 topics tweeted
 history_count = 24
 history_filename = 'history.txt'
 
-topic_history = []
 
-if os.path.isfile(history_filename):
-    with open(history_filename, 'rU') as in_file:
-        topic_history = in_file.read().split('\n')
+#---- main
 
-print('history')
-pp.pprint(topic_history)
+def main():
 
-new_trends = common_trends.difference(set(topic_history))
+    topic_history = []
 
-print('new')
-pp.pprint(new_trends)
+    if os.path.isfile(history_filename):
+        with open(history_filename, 'rU') as in_file:
+            topic_history = in_file.read().split('\n')
 
-if len(new_trends) > 0:
-    # pick first
-    trend = [t for t in new_trends][0]
+    print('history')
+    pp.pprint(topic_history)
 
-    tweet = 'Trending in Australia and The World: ' + trend
 
-    print(tweet)
+    #---- start
 
-    # add trend to history
+    # keep to 15 for rate limit
+    locations = [
+        {'name': 'the world', 'woeid': 1},
+        {'name': 'the USA', 'woeid': 23424977},
+        {'name': 'the UK', 'woeid': 23424975},
+        {'name': 'Canada', 'woeid': 23424775},
+        {'name': 'Ireland', 'woeid': 23424803},
+        {'name': 'New Zealand', 'woeid': 23424916},
+        {'name': 'South Africa', 'woeid': 23424942},
+        {'name': 'France', 'woeid': 23424819},
+        {'name': 'Germany', 'woeid': 23424829},
+        {'name': 'Italy', 'woeid': 23424853},
+        {'name': 'Spain', 'woeid': 23424950},
+        {'name': 'Denmark', 'woeid': 23424796}
+    ]
 
-    topic_history.append(trend)
+    AUSTRALIA_WOE_ID = 23424748
 
-    # save n last
-    with open(history_filename, 'w') as out_file:
-        out_file.write('\n'.join(topic_history[-history_count:]))
+    # Prefix ID with the underscore for query string parameterization.
+    # Without the underscore, the twitter package appends the ID value
+    # to the URL itself as a special case keyword argument.
 
-    #tweet
-    result = twit.statuses.update(status=tweet)
-    pp.pprint(result)
+    australia_trends = twit.trends.place(_id=AUSTRALIA_WOE_ID)
+    australia_trends_set = set([trend['name'] for trend in australia_trends[0]['trends']])
 
-    # retweet the most popular
-    retweet(trend)
+    print('australia')
+    print(json.dumps(australia_trends, indent=4))
 
+    # try until a trend is found
+    for location in locations:
+        if get_location_trend(location, australia_trends_set, topic_history):
+            break
+
+# execute
+main()
