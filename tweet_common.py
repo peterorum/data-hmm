@@ -72,7 +72,7 @@ def get_location_trend(location, australia_trends_set, topic_history):
         # retweet the most popular
         retweet_result = retweet(trend)
 
-        tweet = tweet + '. ' + str(retweet_result['retweets']) + " so far."
+        tweet = tweet + '. ' + str(retweet_result['retweets']) + " retweets so far."
 
         print(tweet)
 
