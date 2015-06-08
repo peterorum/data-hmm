@@ -114,12 +114,11 @@ def main():
 
     # keep to 15 for rate limit
     locations = [
-        {'name': 'the world', 'woeid': 1},
+        {'name': 'The World', 'woeid': 1},
         {'name': 'the USA', 'woeid': 23424977},
         {'name': 'the UK', 'woeid': 23424975},
         {'name': 'Canada', 'woeid': 23424775},
         {'name': 'Ireland', 'woeid': 23424803},
-        {'name': 'New Zealand', 'woeid': 23424916},
         {'name': 'South Africa', 'woeid': 23424942},
         {'name': 'France', 'woeid': 23424819},
         {'name': 'Germany', 'woeid': 23424829},
