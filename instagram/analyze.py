@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 #import os
 #import re
@@ -7,13 +7,11 @@ import sys
 import pickle
 from pprint import pprint
 
-from instagram.client import InstagramAPI
-
 #---- main
 
 def main():
 
-    with open('photos.data', 'r') as in_file:
+    with open('photos.data', 'rb') as in_file:
         photos = pickle.load(in_file)
 
     pprint(photos)

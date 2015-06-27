@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import os
 #import re
@@ -12,12 +12,10 @@ from instagram.client import InstagramAPI
 #---- main
 
 def main():
-
-
     access_token = os.environ['instagram_access_token']
     client_secret = os.environ['instagram_access_token']
 
-    api = InstagramAPI(access_token=access_token, client_secret=client_secret)
+    api = InstagramAPI(access_token=access_token, client_secret=bytearray(client_secret, 'utf-8'))
 
     users = api.user_search(q='peterorum')
     user = users[0]
@@ -39,7 +37,7 @@ def main():
     #pprint(photos)
     #pprint(len(photos))
 
-    with open('photos.data', 'w') as out_file:
+    with open('photos.data', 'wb') as out_file:
         pickle.dump(photos, out_file)
 
 #------------------ main
