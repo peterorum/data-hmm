@@ -39,7 +39,7 @@ def main():
     #pprint(photos)
     #pprint(len(photos))
 
-    with open('photos.txt', 'w') as out_file:
+    with open('photos.data', 'w') as out_file:
         pickle.dump(photos, out_file)
 
 #------------------ main

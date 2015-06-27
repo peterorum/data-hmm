@@ -13,7 +13,7 @@ from instagram.client import InstagramAPI
 
 def main():
 
-    with open('photos.txt', 'r') as in_file:
+    with open('photos.data', 'r') as in_file:
         photos = pickle.load(in_file)
 
     pprint(photos)
