@@ -9,17 +9,19 @@ from pprint import pprint
 
 from instagram.client import InstagramAPI
 
-#---- main
+access_token = os.environ['instagram_access_token']
+client_secret = os.environ['instagram_access_token']
 
-def main():
-    access_token = os.environ['instagram_access_token']
-    client_secret = os.environ['instagram_access_token']
+api = InstagramAPI(access_token=access_token, client_secret=bytearray(client_secret, 'utf-8'))
 
-    api = InstagramAPI(access_token=access_token, client_secret=bytearray(client_secret, 'utf-8'))
 
-    users = api.user_search(q='peterorum')
+def get_user_media(username):
+
+    users = api.user_search(q=username)
     user = users[0]
     pprint(vars(user))
+
+    return
 
     recent_media, next_url = api.user_recent_media(user_id=user.id, count=10)
 
@@ -34,13 +36,21 @@ def main():
         else:
             break
 
-    #pprint(photos)
-    #pprint(len(photos))
+    # pprint(photos)
+    # pprint(len(photos))
 
-    with open('photos.data', 'wb') as out_file:
+    with open('data/' + username + '-media.data', 'wb') as out_file:
         pickle.dump(photos, out_file)
 
-#------------------ main
+
+#---- main
+
+def main():
+
+    get_user_media('peterorum')
+
+#------------------ start
+
 main()
 
 sys.exit()
