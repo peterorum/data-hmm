@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import os
 #import re
@@ -10,7 +10,7 @@ from pprint import pprint
 from instagram.client import InstagramAPI
 
 access_token = os.environ['instagram_access_token']
-client_secret = os.environ['instagram_access_token']
+client_secret = os.environ['instagram_client_secret']
 
 api = InstagramAPI(access_token=access_token, client_secret=bytearray(client_secret, 'utf-8'))
 
@@ -20,8 +20,6 @@ def get_user_media(username):
     users = api.user_search(q=username)
     user = users[0]
     pprint(vars(user))
-
-    return
 
     recent_media, next_url = api.user_recent_media(user_id=user.id, count=10)
 
