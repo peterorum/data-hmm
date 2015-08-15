@@ -9,30 +9,35 @@ import pprint
 import twitter
 
 #import pudb
-#pu.db
+# pu.db
 
 # ---- retweet
 
+
 def retweet(topic):
     search_results = twit.search.tweets(q=topic, lang='en')
-    #print('search_results')
-    #pp.pprint(search_results)
+    # print('search_results')
+    # pp.pprint(search_results)
 
-    texts = [{'id': tweet['id_str'], 'text': tweet['text'], 'retweets': tweet['retweet_count']} for tweet in search_results['statuses']]
-    #print(texts)
+    min_retweets = 500
+
+    texts = [{'id': tweet['id_str'], 'text': tweet['text'], 'retweets': tweet['retweet_count']}
+             for tweet in search_results['statuses'] if tweet['retweet_count'] >= min_retweets]
+    # print(texts)
 
     if len(texts) > 0:
         # sort by retweet count
         texts = sorted(texts, key=lambda t: t['retweets'], reverse=True)
         pp.pprint(texts)
 
-        #take most retweeted
+        # take most retweeted
 
         result = {'retweets': texts[0]['retweets'], 'id': texts[0]['id']}
 
         return result
     else:
         print('nothing to retweet')
+
 
 def get_location_trend(location, australia_trends_set, topic_history):
     found = False
@@ -76,7 +81,7 @@ def get_location_trend(location, australia_trends_set, topic_history):
 
         print(tweet)
 
-        #tweet
+        # tweet
         result = twit.statuses.update(status=tweet)
         pp.pprint(result)
 
@@ -88,7 +93,8 @@ def get_location_trend(location, australia_trends_set, topic_history):
 
 #---- global
 pp = pprint.PrettyPrinter(indent=4)
-auth = twitter.oauth.OAuth(os.environ['tw_hmm_oauth_token'], os.environ['tw_hmm_oauth_token_secret'], os.environ['tw_hmm_consumer_key'], os.environ['tw_hmm_consumer_secret'])
+auth = twitter.oauth.OAuth(os.environ['tw_hmm_oauth_token'], os.environ['tw_hmm_oauth_token_secret'], os.environ[
+                           'tw_hmm_consumer_key'], os.environ['tw_hmm_consumer_secret'])
 twit = twitter.Twitter(auth=auth)
 
 # tweet the first topic not in the last 24 topics tweeted
@@ -108,7 +114,6 @@ def main():
 
     print('history')
     pp.pprint(topic_history)
-
 
     #---- start
 
