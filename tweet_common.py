@@ -62,32 +62,33 @@ def get_location_trend(location, australia_trends_set, topic_history):
         # pick first
         trend = [t for t in new_trends][0]
 
-        tweet = 'Trending in Australia and ' + location['name'] + ': ' + trend
-
-        print(tweet)
-
-        # add trend to history
-
-        topic_history.append(trend)
-
-        # save n last
-        with open(history_filename, 'w') as out_file:
-            out_file.write('\n'.join(topic_history[-history_count:]))
-
         # retweet the most popular
         retweet_result = retweet(trend)
 
-        tweet = tweet + '. ' + str(retweet_result['retweets']) + " retweets so far."
+        if retweet_result is not None:
+            tweet = 'Trending in Australia and ' + location['name'] + ': ' + trend
 
-        print(tweet)
+            print(tweet)
 
-        # tweet
-        result = twit.statuses.update(status=tweet)
-        pp.pprint(result)
+            # add trend to history
 
-        # retweet
-        rtresult = twit.statuses.retweet(id=retweet_result['id'])
-        pp.pprint(rtresult)
+            topic_history.append(trend)
+
+            # save n last
+            with open(history_filename, 'w') as out_file:
+                out_file.write('\n'.join(topic_history[-history_count:]))
+
+            tweet = tweet + '. ' + str(retweet_result['retweets']) + " retweets so far."
+
+            print(tweet)
+
+            # tweet
+            result = twit.statuses.update(status=tweet)
+            pp.pprint(result)
+
+            # retweet
+            rtresult = twit.statuses.retweet(id=retweet_result['id'])
+            pp.pprint(rtresult)
 
     return found
 
