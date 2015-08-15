@@ -21,7 +21,7 @@ def retweet(topic):
 
     min_retweets = 500
 
-    texts = [{'id': tweet['id_str'], 'text': tweet['text'], 'retweets': tweet['retweet_count']}
+    texts = [{'id': tweet['id_str'], 'text': tweet['text'], 'retweets': tweet['retweet_count'], 'favorites': tweet['favorite_count']}
              for tweet in search_results['statuses'] if tweet['retweet_count'] >= min_retweets]
     # print(texts)
 
@@ -32,7 +32,7 @@ def retweet(topic):
 
         # take most retweeted
 
-        result = {'retweets': texts[0]['retweets'], 'id': texts[0]['id']}
+        result = {'retweets': texts[0]['retweets'], 'favorites': texts[0]['favorites'], 'id': texts[0]['id']}
 
         return result
     else:
@@ -78,7 +78,8 @@ def get_location_trend(location, australia_trends_set, topic_history):
             with open(history_filename, 'w') as out_file:
                 out_file.write('\n'.join(topic_history[-history_count:]))
 
-            tweet = tweet + '. ' + str(retweet_result['retweets']) + " retweets so far."
+            tweet = tweet + '. ' + str(retweet_result['retweets']) + \
+                " retweets and " + str(retweet_result['favorites']) + " favorites so far."
 
             print(tweet)
 
