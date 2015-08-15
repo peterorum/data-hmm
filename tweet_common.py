@@ -1,21 +1,21 @@
 #!/usr/bin/python3
 
 import os
-#import re
-#import sys
+# import re
+# import sys
 import json
 import pprint
 
 import twitter
 
-#import pudb
+# import pudb
 # pu.db
 
 # ---- retweet
 
 
 def retweet(topic):
-    search_results = twit.search.tweets(q=topic, lang='en')
+    search_results = twit.search.tweets(q=topic, lang='en', result_type='popular')
     # print('search_results')
     # pp.pprint(search_results)
 
@@ -95,7 +95,7 @@ def get_location_trend(location, australia_trends_set, topic_history):
 #---- global
 pp = pprint.PrettyPrinter(indent=4)
 auth = twitter.oauth.OAuth(os.environ['tw_hmm_oauth_token'], os.environ['tw_hmm_oauth_token_secret'], os.environ[
-                           'tw_hmm_consumer_key'], os.environ['tw_hmm_consumer_secret'])
+    'tw_hmm_consumer_key'], os.environ['tw_hmm_consumer_secret'])
 twit = twitter.Twitter(auth=auth)
 
 # tweet the first topic not in the last 24 topics tweeted
