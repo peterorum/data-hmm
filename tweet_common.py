@@ -31,7 +31,6 @@ def retweet(topic):
         pp.pprint(texts)
 
         # take most retweeted
-
         result = {'retweets': texts[0]['retweets'], 'favorites': texts[0]['favorites'], 'id': texts[0]['id']}
 
         return result

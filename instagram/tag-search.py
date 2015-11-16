@@ -1,10 +1,11 @@
-#!/usr/bin/python3
+#!/usr/local/bin/python3
 
 import os
-#import re
+# import re
 import sys
-#import json
+# import json
 import pickle
+import urllib
 from pprint import pprint
 
 from instagram.client import InstagramAPI
@@ -23,15 +24,23 @@ def tag_search(tag):
         tag1 = results[0]
         pprint(vars(tag1))
 
-        recent_media = api.tag_recent_media(tag_name=tag1.name, count=10)[0]
-
         photos = []
+
+        recent_media, next = api.tag_recent_media(tag_name=tag1.name, count=100)
+
+        # pprint(next)
 
         for media in recent_media:
             photos.append(media)
 
-        # pprint(photos)
-        # pprint(len(photos))
+        while next:
+            query = urllib.parse.urlparse(next).query
+            max_tag_id = urllib.parse.parse_qs(query)['max_tag_id'][0]
+
+            recent_media, next = api.tag_recent_media(tag_name=tag1.name, count=100, max_tag_id=max_tag_id)
+
+            for media in recent_media:
+                photos.append(media)
 
         with open('data/tag-' + tag + '-media.data', 'wb') as out_file:
             pickle.dump(photos, out_file)
@@ -39,15 +48,20 @@ def tag_search(tag):
     except InstagramAPIError as e:
         print(e)
 
-    print("tag_search: Remaining API Calls = %s/%s" %
-          (api.x_ratelimit_remaining, api.x_ratelimit))
-
 #---- main
 
 
 def main():
 
-    tag_search('streetphotography')
+    tags = ['qantasinstaper', 'qantasinstadrw', 'qantasinstabne', 'qantasinstasyd',
+            'qantasinstacbr', 'qantasinstamel', 'qantasinstahba', 'qantasinstaadl', 'qantasinstaulu']
+
+    for tag in tags:
+        tag_search(tag)
+
+    print("Remaining API Calls = %s/%s" %
+          (api.x_ratelimit_remaining, api.x_ratelimit))
+
 
 #------------------ start
 
