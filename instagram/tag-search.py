@@ -55,15 +55,8 @@ def tag_search(tag):
 
 def main():
 
-    tags = [
-        'qantasinstaper', 'qantasinstadrw', 'qantasinstabne', 'qantasinstasyd',
-        'qantasinstacbr', 'qantasinstamel', 'qantasinstahba', 'qantasinstaadl', 'qantasinstaulu',
-        'qantasinstawello', 'qantasinstactl', 'qantasinstasun',
-        'qantasinstameet',
-        'qantasinstameetper', 'qantasinstameetdrw', 'qantasinstameetbne', 'qantasinstameetsyd',
-        'qantasinstameetcbr', 'qantasinstameetmel', 'qantasinstameethba', 'qantasinstameetadl', 'qantasinstameetulu',
-        'qantasinstameetwello', 'qantasinstameetctl', 'qantasmeetinstasun'
-    ]
+    tags = ['streetphotography'
+            ]
 
     for tag in tags:
         tag_search(tag)

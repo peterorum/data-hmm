@@ -20,8 +20,7 @@ api = InstagramAPI(access_token=access_token, client_secret=bytearray(client_sec
 
 def main():
 
-    tags = ['qantasinstaper', 'qantasinstadrw', 'qantasinstabne', 'qantasinstasyd',
-            'qantasinstacbr', 'qantasinstamel', 'qantasinstahba', 'qantasinstaadl', 'qantasinstaulu']
+    tags = ['streetphotography']
 
     photographers = set()
 

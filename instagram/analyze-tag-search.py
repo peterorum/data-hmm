@@ -12,8 +12,7 @@ from pprint import pprint
 
 def main():
 
-    tags = ['qantasinstaper', 'qantasinstadrw', 'qantasinstabne', 'qantasinstasyd',
-            'qantasinstacbr', 'qantasinstamel', 'qantasinstahba', 'qantasinstaadl', 'qantasinstaulu']
+    tags = ['streetphotography']
 
     for tag in tags:
 
