@@ -21,29 +21,31 @@ def tag_search(tag):
 
     try:
         results = api.tag_search(q=tag)[0]
-        tag1 = results[0]
-        pprint(vars(tag1))
 
-        photos = []
+        if (len(results) > 0):
+            tag1 = results[0]
+            pprint(vars(tag1))
 
-        recent_media, next = api.tag_recent_media(tag_name=tag1.name, count=100)
+            photos = []
 
-        # pprint(next)
+            recent_media, next = api.tag_recent_media(tag_name=tag1.name, count=100)
 
-        for media in recent_media:
-            photos.append(media)
-
-        while next:
-            query = urllib.parse.urlparse(next).query
-            max_tag_id = urllib.parse.parse_qs(query)['max_tag_id'][0]
-
-            recent_media, next = api.tag_recent_media(tag_name=tag1.name, count=100, max_tag_id=max_tag_id)
+            # pprint(next)
 
             for media in recent_media:
                 photos.append(media)
 
-        with open('data/tag-' + tag + '-media.data', 'wb') as out_file:
-            pickle.dump(photos, out_file)
+            while next:
+                query = urllib.parse.urlparse(next).query
+                max_tag_id = urllib.parse.parse_qs(query)['max_tag_id'][0]
+
+                recent_media, next = api.tag_recent_media(tag_name=tag1.name, count=100, max_tag_id=max_tag_id)
+
+                for media in recent_media:
+                    photos.append(media)
+
+            with open('data/tag-' + tag + '-media.data', 'wb') as out_file:
+                pickle.dump(photos, out_file)
 
     except InstagramAPIError as e:
         print(e)
@@ -53,8 +55,15 @@ def tag_search(tag):
 
 def main():
 
-    tags = ['qantasinstaper', 'qantasinstadrw', 'qantasinstabne', 'qantasinstasyd',
-            'qantasinstacbr', 'qantasinstamel', 'qantasinstahba', 'qantasinstaadl', 'qantasinstaulu']
+    tags = [
+        'qantasinstaper', 'qantasinstadrw', 'qantasinstabne', 'qantasinstasyd',
+        'qantasinstacbr', 'qantasinstamel', 'qantasinstahba', 'qantasinstaadl', 'qantasinstaulu',
+        'qantasinstawello', 'qantasinstactl', 'qantasinstasun',
+        'qantasinstameet',
+        'qantasinstameetper', 'qantasinstameetdrw', 'qantasinstameetbne', 'qantasinstameetsyd',
+        'qantasinstameetcbr', 'qantasinstameetmel', 'qantasinstameethba', 'qantasinstameetadl', 'qantasinstameetulu',
+        'qantasinstameetwello', 'qantasinstameetctl', 'qantasmeetinstasun'
+    ]
 
     for tag in tags:
         tag_search(tag)
